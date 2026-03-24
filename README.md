@@ -64,3 +64,6 @@ Input a sequence of at least 10 numbers to see the model predict the next 5 valu
 
 ### Real Estate Prediction
 Adjust the square footage and number of bedrooms to get an estimated market value.
+
+
+![Result Screenshot](./result_screenshot.png)
