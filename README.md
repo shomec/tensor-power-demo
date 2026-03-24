@@ -59,8 +59,8 @@ Upload any common photo (e.g., a dog, a car, a coffee cup) and see the model ide
 ### Sentiment Analysis
 Type any sentence to see if the model perceives it as Positive, Negative, or Neutral.
 
-### ARIMA Forecasting
-Input a sequence of at least 10 numbers to see the model predict the next 5 values in the series.
+### ARIMA (Auto Regression Integrated Moving Average) based Time-Series Forecasting
+Input a sequence of last 7 days of weather temperature to see the model predict the next 7 days of temperature.
 
 ### Real Estate Prediction
 Adjust the square footage and number of bedrooms to get an estimated market value.
