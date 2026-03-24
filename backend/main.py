@@ -27,16 +27,29 @@ image_model = ResNet50V2(weights='imagenet')
 from transformers import pipeline, AutoTokenizer, TFAutoModelForSequenceClassification
 import tensorflow as tf
 
-# Load Sentiment Analysis model globally (Real TF Model with 3 classes: Neg, Neu, Pos)
-sentiment_pipeline = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest", framework="tf")
+# Load Sentiment Analysis model globally (Real TF Model with 3 classes)
+# Using a more robust multilingual student model for broader language support and better accuracy
+sentiment_pipeline = pipeline("sentiment-analysis", model="lxyuan/distilbert-base-multilingual-cased-sentiments-student", framework="tf")
 
 def real_sentiment_analysis(text: str):
+    # Get raw result
     result = sentiment_pipeline(text)[0]
-    # result is like {'label': 'neutral', 'score': 0.99}
-    # Labels for this model are: 'negative', 'neutral', 'positive'
+    print(f"RAW Sentiment Output for '{text}': {result}")
+    
+    label = result['label'].lower()
+    score = float(result['score'])
+    
+    # Mapping for this specific model: 'positive', 'neutral', 'negative'
+    mapping = {
+        'positive': 'Positive',
+        'neutral': 'Neutral',
+        'negative': 'Negative'
+    }
+    
+    sentiment = mapping.get(label, label.capitalize())
     return {
-        "sentiment": result['label'].capitalize(),
-        "confidence": float(result['score'])
+        "sentiment": sentiment,
+        "confidence": score
     }
 
 # For the Price Prediction (Regression), we'll use a simple pre-trained weight set or define a small model
@@ -50,6 +63,9 @@ def predict_house_price(area: float, bedrooms: int):
 async def classify_image(file: UploadFile = File(...)):
     try:
         contents = await file.read()
+        print(f"Received file: {file.filename}, Size: {len(contents)} bytes")
+        if len(contents) == 0:
+            raise HTTPException(status_code=400, detail="Empty file")
         img = Image.open(io.BytesIO(contents)).convert('RGB')
         
         # Use high-quality PIL lanczos for initial resize or just convert to array

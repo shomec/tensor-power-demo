@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Pre-download weights during build
 RUN python -c "from tensorflow.keras.applications.resnet_v2 import ResNet50V2; ResNet50V2(weights='imagenet')"
-RUN python -c "from transformers import pipeline; pipeline('sentiment-analysis', model='cardiffnlp/twitter-roberta-base-sentiment-latest', framework='tf')"
+RUN python -c "from transformers import pipeline; pipeline('sentiment-analysis', model='lxyuan/distilbert-base-multilingual-cased-sentiments-student', framework='tf')"
 
 COPY . .
 
